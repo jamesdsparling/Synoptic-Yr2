@@ -30,14 +30,22 @@
         attribution: "© OpenStreetMap",
       }).addTo(map);
 
-      var marker = L.marker([-10.689457, 142.531821]).addTo(map);
+      var fireIcon = L.icon({
+        iconUrl: "fireIcon.png",
+        iconSize: [48, 65.48], // size of the icon
+      });
 
-      var circle = L.circle([-10.691096, 142.532917], {
+      var marker = L.marker([-10.689457, 142.531821], { icon: fireIcon }).addTo(
+        map
+      );
+
+      var circle = L.circle([-10.689457, 142.531821], {
         color: "red",
         fillColor: "#f03",
         fillOpacity: 0.5,
         radius: 100,
       }).addTo(map);
+      circle.bindPopup("<b>Fire!</b><br>Stay away.").openPopup();
     </script>
   </body>
 </html>
