@@ -10,6 +10,12 @@ const port = 3000;
 var nodemailer = require("nodemailer");
 const { allowedNodeEnvironmentFlags } = require("process");
 
+app.use(
+  express.static("public", {
+    extensions: ["html", "htm"],
+  })
+);
+
 function presentFile(route, destination) {
   {
     app.get(route, (req, res) => {
@@ -18,7 +24,9 @@ function presentFile(route, destination) {
   }
 }
 
-presentFile("/", "userPages/index.html");
-presentFile("/about", "userPages/about.html");
+// presentFile("/", "index");
+// app.get("/", (req, res) => {
+//   res.redirect("/index");
+// });
 
 app.listen(port, () => console.log("listening"));
