@@ -1,13 +1,19 @@
+drop table if exists profiles;
+drop table if exists polygons;
+drop table if exists messages;
+
 create table profiles (
   profileID SERIAL primary key,
-  email varchaar(100) not null unique,
+  email varchar(100) not null unique,
   pass varchar(50) not null,
   admin bool not null default false
 );
 
+create type polyType as ENUM ('fire', 'water', 'coral');
+
 create table polygons (
   polyID SERIAL primary key,
-  type ENUM('fire', 'water', 'coral') not null,
+  type polyType not null,
   data varchar(100) not null,
   adminApproved bool not null default false
 );
