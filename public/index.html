@@ -30,6 +30,15 @@
       crossorigin=""
     ></script>
 
+    <script src="https://unpkg.com/wrld.js@1.x.x"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
+
+    <link href="https://cdn-webgl.wrld3d.com/wrldjs/addons/resources/v1/latest/css/wrld.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <link href="https://cdn-webgl.wrld3d.com/wrldjs/addons/polygon_editor/latest/polygon_editor.css" rel="stylesheet" />
+    <script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/polygon_editor/latest/polygon_editor.js"></script>
+
     <title>Cape York</title>
   </head>
   <body>
@@ -43,11 +52,64 @@
     <div id="map"></div>
 
     <script>
-      var map = L.map("map").setView([-10.689457, 142.531821], 17);
+
+      var center = [-10.689457, 142.531821];
+      
+      var map = L.map("map").setView(center, 17);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         attribution: "© OpenStreetMap",
       }).addTo(map);
+
+      L.marker(center).addTo(map);
+
+      var editableLayers = new L.featureGroup();
+      map.addLayer(editableLayers);
+
+      const options = {
+        draw: {
+          polygon: {
+            allowIntersection: false,
+            allowOverlap: false,
+            showArea: true,
+            shapeOptions: {
+              color: '#3375CC',
+              weight: 5
+            }
+          }
+        },
+        edit: {
+          poly: {
+            allowIntersection: false,
+            allowOverlap: false
+          }
+        }
+      };
+
+      var polygonEditor = new WrldIndoorPolygonEditor(map, options);
+
+      var counter = 0;
+
+      map.on(L.Draw.Event.CREATED, function (e) {
+        var layer = e.layer;
+        if (layer instanceof Wrld.Polygon) {
+          layer.setUserData(counter++);
+          console.log("Created Polygon with userdata: " + layer.getUserData());
+
+          layer.on("click", function(e) {
+            console.log("Polygon data: " + e.target.getUserData() + " Points: " + e.target.getLatLngs());
+          });
+        }
+      });
+    
+      map.on(L.Draw.Event.DELETED, function (e) {
+        var layers = e.layers;
+        layers.eachLayer(layer => {
+          if (layer instanceof Wrld.Polygon) {
+            console.log("Deleted Polygon with userdata: " + layer.getUserData());
+          }
+        })
+      });
 
       var fireIcon = L.icon({
         iconUrl: "fireIcon.png",
@@ -147,6 +209,10 @@
       let marker1 = L.marker([-10.68778, 142.53159]);
       marker1.bindPopup("Custom marker");
       marker1.addTo(map);
+
+
     </script>
+
+    
   </body>
 </html>
