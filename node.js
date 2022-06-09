@@ -9,6 +9,18 @@ const port = 3000;
 
 var nodemailer = require("nodemailer");
 const { allowedNodeEnvironmentFlags } = require("process");
+const { Client } = require("pg/lib");
+
+const dbPass = fs.readFileSync("pass.txt");
+
+const client = new Client({
+  user: "defaultuser",
+  host: "localhost",
+  database: "Synoptic",
+  password: dbPass.toString(),
+  port: 5432,
+});
+client.connect();
 
 app.use(
   express.static("public", {
