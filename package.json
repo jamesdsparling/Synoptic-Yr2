@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "express-session": "^1.17.3",
+    "nodemailer": "^6.7.5",
+    "pg": "^8.7.3"
+  }
+}
