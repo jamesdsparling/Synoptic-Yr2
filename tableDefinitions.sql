@@ -8,6 +8,9 @@ create table profiles (
   pass varchar(50) not null,
   admin bool not null default false
 );
+insert into profiles (email, pass, admin) values
+('defaultuser', 'defaultpass', true);
+
 
 create type polyType as ENUM ('fire', 'water', 'coral');
 

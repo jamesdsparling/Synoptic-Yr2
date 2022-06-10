@@ -16,6 +16,7 @@ const { allowedNodeEnvironmentFlags } = require("process");
 
 const dbPass = fs.readFileSync("pass.txt");
 
+console.log(dbPass.toString());
 const client = new Client({
   user: "defaultuser",
   host: "localhost",
