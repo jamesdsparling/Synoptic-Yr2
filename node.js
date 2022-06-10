@@ -3,13 +3,16 @@ const session = require("express-session");
 const res = require("express/lib/response");
 const fs = require("fs");
 const path = require("path");
+const { Client } = require("pg");
 
 const app = express();
 const port = 3000;
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
+
 var nodemailer = require("nodemailer");
 const { allowedNodeEnvironmentFlags } = require("process");
-const { Client } = require("pg/lib");
 
 const dbPass = fs.readFileSync("pass.txt");
 
@@ -44,7 +47,7 @@ function presentFile(route, destination) {
 app.post("/signin", (req, res) => {
   if (req.body.email && req.body.password) {
     client.query(
-      "SSELECT profile_ID, pass FROM profiles WHERE email = $1",
+      "SELECT profile_ID, pass FROM profiles WHERE email = $1",
       [req.body.email],
       (err, dbRes) => {
         if (err) {
@@ -85,6 +88,7 @@ app.post("/signup", (req, res) => {
         ["email", "pass"],
         (err, dbRes) => {
           if (err) {
+            console.log(err.stack);
             if (err.constraint == "profiles_email_key") {
               console.log("User with email already exists");
               res.send(

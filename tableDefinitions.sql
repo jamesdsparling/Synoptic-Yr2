@@ -3,7 +3,7 @@ drop table if exists polygons;
 drop table if exists messages;
 
 create table profiles (
-  profile_ID SERIAL primary key,
+  profileID SERIAL primary key,
   email varchar(100) not null unique,
   pass varchar(50) not null,
   admin bool not null default false
@@ -12,16 +12,15 @@ create table profiles (
 create type polyType as ENUM ('fire', 'water', 'coral');
 
 create table polygons (
-  poly_ID SERIAL primary key,
+  polyID SERIAL primary key,
   type polyType not null,
   data varchar(100) not null,
-  admin_approved bool not null default false,
-  popup_message varchar(100)
+  adminApproved bool not null default false
 );
 
 create table messages (
-  message_ID SERIAL primary key,
-  from_profile int not null references profiles(profileID) ON DELETE CASCADE,
-  to_profile int not null references profiles(profileID) ON DELETE CASCADE,
+  messageID SERIAL primary key,
+  fromProfile int not null references profiles(profileID) ON DELETE CASCADE,
+  toProfile int not null references profiles(profileID) ON DELETE CASCADE,
   message varchar(300)
-)
+);
