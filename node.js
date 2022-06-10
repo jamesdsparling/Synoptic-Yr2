@@ -8,8 +8,8 @@ const { Client } = require("pg");
 const app = express();
 const port = 3000;
 
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: true }));
+// const bodyParser = require("body-parser");
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 var nodemailer = require("nodemailer");
 const { allowedNodeEnvironmentFlags } = require("process");
@@ -26,9 +26,34 @@ const client = new Client({
 });
 client.connect();
 
+const emailPass = fs.readFileSync("emailPass.txt");
+
+var transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "james.sparling.test.email@gmail.com",
+    pass: emailPass.toString(),
+  },
+});
+
+app.use(
+  express.urlencoded({
+    // Allow body objects of any type
+    extended: true,
+  })
+);
+
 app.use(
   express.static("public", {
     extensions: ["html", "htm"],
+  })
+);
+
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
   })
 );
 
@@ -67,7 +92,7 @@ app.post("/signin", (req, res) => {
           } else {
             console.log("Incorrect email or password");
             res.send(
-              'Incorrect email or password <br> <a href="/signin.html"><- go back</a>'
+              'Incorrect email or password <br> <a href="/signin"><- go back</a>'
             );
           }
         }
@@ -79,14 +104,12 @@ app.post("/signin", (req, res) => {
 app.post("/signup", (req, res) => {
   if (req.body.email && req.body.password && req.body.password2) {
     if (req.body.password != req.body.password2) {
-      res.send(
-        'Passwords do not match! <br> <a href="/signup.html"><- go back</a>'
-      );
+      res.send('Passwords do not match! <br> <a href="/signup"><- go back</a>');
     } else {
       client.query(
         "INSERT INTO profiles(email, pass) VALUES ($1, $2) RETURNING *",
         // [req.body.email, req.body.pass],
-        ["email", "pass"],
+        [req.body.email, req.body.password],
         (err, dbRes) => {
           if (err) {
             console.log(err.stack);
@@ -95,7 +118,7 @@ app.post("/signup", (req, res) => {
               res.send(
                 "User with email " +
                   req.body.email +
-                  ' already exists. <br> <a href="/signup.html"><- go back</a>'
+                  ' already exists. <br> <a href="/signup"><- go back</a>'
               );
             } else {
               console.log(err.stack);
@@ -128,7 +151,7 @@ app.post("/signup", (req, res) => {
 
             // Temporary solution. User is still created even if continue is not pressed.
             res.send(
-              'By clicking continue you agree to accept our <a href="/privacy.html">privacy permissions</a> <br> <a href="/dashboard">Continue...</a>'
+              'By clicking continue you agree to accept our <a href="/privacy">privacy permissions</a> <br> <a href="/">Continue...</a>'
             );
           }
         }
