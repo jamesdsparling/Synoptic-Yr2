@@ -11,10 +11,13 @@
         margin: 0;
       }
       html,
-      body,
-      #map {
+      body {
         height: 100%;
         width: 100%;
+      }
+      #map {
+        width: 100%;
+        height: 95%;
       }
     </style>
     <link
@@ -30,123 +33,96 @@
       crossorigin=""
     ></script>
 
-    <script src="https://unpkg.com/wrld.js@1.x.x"></script>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css"
-      rel="stylesheet"
-    />
+    <script src="/lib/Leaflet-draw/Leaflet.draw.js"></script>
+    <link rel="stylesheet" href="/lib/Leaflet-draw/leaflet.draw.css" />
 
-    <link
-      href="https://cdn-webgl.wrld3d.com/wrldjs/addons/resources/v1/latest/css/wrld.css"
-      rel="stylesheet"
-    />
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
-    <link
-      href="https://cdn-webgl.wrld3d.com/wrldjs/addons/polygon_editor/latest/polygon_editor.css"
-      rel="stylesheet"
-    />
-    <script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/polygon_editor/latest/polygon_editor.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <title>Cape York</title>
   </head>
   <body>
-    <a style="color: red" href="/">Map</a>
-    <a href="/report">Report</a>
-    <a href="/fire">Fire</a>
-    <a href="/water">Water</a>
-    <a href="/info">Info</a>
-    <a href="/contact">Contact</a>
-    <a href="/help">Help</a>
-    <a href="/signin">Sign In</a>
-    <a href="/signup">Sign Up</a>
+    <div>
+      <a style="color: red" href="/">Map</a>
+      <a href="/report">Report</a>
+      <a href="/fire">Fire</a>
+      <a href="/water">Water</a>
+      <a href="/info">Info</a>
+      <a href="/contact">Contact</a>
+      <a href="/help">Help</a>
+      <a href="/signin">Sign In</a>
+      <a href="/signup">Sign Up</a>
+    </div>
 
     <div id="map"></div>
 
     <script>
       var center = [-10.689457, 142.531821];
 
+      var osm = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          maxZoom: 19,
+          attribution: "© OpenStreetMap",
+        }
+      );
+      var google = L.tileLayer(
+        "http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}",
+        {
+          attribution: "google",
+        }
+      );
+
       var map = L.map("map").setView(center, 17);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "© OpenStreetMap",
-      }).addTo(map);
+      osm.addTo(map);
 
-      L.marker(center).addTo(map);
+      var drawnItems = new L.FeatureGroup();
+      drawnItems.addTo(map);
 
-      var editableLayers = new L.featureGroup();
-      map.addLayer(editableLayers);
+      L.control
+        .layers(
+          {
+            Map: osm,
+            Satellite: google,
+          },
+          { "Show overlays": drawnItems },
+          { position: "topleft", collapsed: false }
+        )
+        .addTo(map);
 
-      const options = {
+      var drawControl = new L.Control.Draw({
+        edit: {
+          featureGroup: drawnItems,
+        },
         draw: {
           polygon: {
             allowIntersection: false,
             allowOverlap: false,
             showArea: true,
-            shapeOptions: {
-              color: "#3375CC",
-              weight: 5,
-            },
           },
-        },
-        edit: {
-          poly: {
-            allowIntersection: false,
-            allowOverlap: false,
-          },
-        },
-      };
-
-      var drawnItems = new L.FeatureGroup();
-      map.addLayer(drawnItems);
-      var drawControl = new L.Control.Draw({
-        edit: {
-          featureGroup: drawnItems,
         },
       });
       map.addControl(drawControl);
 
-      map.on(L.Draw.Event.CREATED, function (e) {
+      map.on(L.Draw.Event.CREATED, (e) => {
         var type = e.layerType,
           layer = e.layer;
-        if (type === "marker") {
-          // Do marker specific actions
+        switch (type) {
+          case "polyline":
+            break;
+          case "polygon":
+            break;
+          case "rectangle":
+            break;
+          case "circle":
+            break;
+          case "marker":
+            break;
+          case "circlemarker":
+            break;
         }
-        // Do whatever else you need to. (save to db; add to map etc)
-        map.addLayer(layer);
+
+        drawnItems.addLayer(layer);
       });
-
-      // var polygonEditor = new WrldIndoorPolygonEditor(map, options);
-
-      // var counter = 0;
-
-      // map.on(L.Draw.Event.CREATED, function (e) {
-      //   var layer = e.layer;
-      //   if (layer instanceof Wrld.Polygon) {
-      //     layer.setUserData(counter++);
-      //     console.log("Created Polygon with userdata: " + layer.getUserData());
-
-      //     layer.on("click", function (e) {
-      //       console.log(
-      //         "Polygon data: " +
-      //           e.target.getUserData() +
-      //           " Points: " +
-      //           e.target.getLatLngs()
-      //       );
-      //     });
-      //   }
-      // });
-
-      // map.on(L.Draw.Event.DELETED, function (e) {
-      //   var layers = e.layers;
-      //   layers.eachLayer((layer) => {
-      //     if (layer instanceof Wrld.Polygon) {
-      //       console.log(
-      //         "Deleted Polygon with userdata: " + layer.getUserData()
-      //       );
-      //     }
-      //   });
-      // });
 
       var fireIcon = L.icon({
         iconUrl: "fireIcon.png",
