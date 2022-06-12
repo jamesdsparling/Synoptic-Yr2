@@ -6,7 +6,7 @@ const path = require("path");
 const { Client } = require("pg");
 
 const app = express();
-const port = 3000;
+const port = 8080;
 
 // const bodyParser = require("body-parser");
 // app.use(bodyParser.urlencoded({ extended: true }));
