@@ -1,18 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./public/*.{html,js}"],
+  mode: 'jit',
+  darkmode: false,
+  corePlugins: {
+    preflight: false, 
+  },
+  prefix: 'tw-',
+  content: [".public/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'poppins': ["'Poppins'", 'sans-serif']
+      },
+      backroundImage: {
+        'hero': "url('./assets/images/hero.jpg')"
+      }
+    },
   },
-  plugins: [require("daisyui")],
-  daisyui: {
-    styled: true,
-    themes: true,
-    base: true,
-    utils: true,
-    logs: true,
-    rtl: false,
-    prefix: "",
-    darkTheme: "dark",
-  },
-};
+  plugins: [],
+}

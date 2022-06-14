@@ -4,9 +4,119 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/public/assets/css/tailwind.css"/> 
+    <link rel="stylesheet" href="/public/dist/output.css"/> 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap" rel="stylesheet">
+
     <title>Info</title>
+    <script src="https://cdn-tailwindcss.vercel.app/"></script>
+    
   </head>
   <body>
-    Todo: make this page
+
+    <header class = "py-6 text-white bg-black opacity-100">
+      <div class="container flex justify-between items-center mx-auto px-8 md:px-14 lg:px-2 w-full ">
+        <div class= "font-lg font-bold text-white">Cape York Conservation</div>
+        <div class="hidden md:flex space-x-12 items-center">
+          <a href="index.html">Home</a>
+          <a href="/report">Report</a>
+          <a class = "font-bold" href="/fire">Fire</a>
+          <a href="/water">Water</a>
+          <a href="/info">Info</a>
+          <a href="/contact">Contact</a>
+          <a href="/account">Contact</a>
+        </div>
+        
+      </div>
+      
+    </header>
+    
+    
+
+    <div class = "snap-y h-screen w-screen overflow-scroll">
+      <div class = "snap-start bg-amber-200 w-screen h-screen flex items-center justify-center text-8xl bg-accent bg-cover bg-hero" style="background-image: url('./assets/images/cp3.jpg')">
+        
+        <div class="origin-top-left" >
+                 <div class="p-10 bg-black opacity-75 px-10 max-w-2xl mx-auto h-300 p-10 flex flex-col items-start justify-center">
+                  <h1 class=" text-white font-bold text-6xl block duration-700 relative transform opacity-0 transition-all translate-y-12 ease-out" data-replace='{ "translate-y-12": "translate-y-0", "opacity-0": "opacity-100" }'>
+                    Cape York<br>Australia
+                  </h1>
+                  <p class="top-5 text-white text-lg block duration-700 delay-150 relative transform transition-all opacity-0 translate-y-12 ease-out" data-replace='{ "translate-y-12": "translate-y-0", "opacity-0": "opacity-100" }'>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate voluptas eius explicabo suscipit, nemo sapiente dignissimos, ipsum illum minus ab itaque accusamus reprehenderit. Quis fuga iusto saepe nobis sunt a. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio ut nulla quos nemo nesciunt enim officiis laudantium, neque labore. Officia illo obcaecati, impedit distinctio dicta laudantium mollitia quam nihil quisquam!
+                  </p>
+                  
+                  <div class="mt-10 sm:flex sm:justify-center lg:justify-start duration-700 delay-300 relative transform transition-all opacity-0 translate-y-12 ease-out" data-replace='{ "translate-y-12": "translate-y-0", "opacity-0": "opacity-100" }'>
+                      <div class="rounded-md shadow">
+                          <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
+                              Get started
+                          </a>
+                      </div>
+                      <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+                          <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-500 focus:outline-none focus:border-indigo-300 focus:shadow-outline-indigo transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
+                              Live demo
+                          </a>
+                      </div>
+                  </div>
+                  </div>
+        
+        </div></div>
+
+
+        
+          <script>
+            document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(function(){
+        var replacers = document.querySelectorAll('[data-replace]');
+        for(var i=0; i<replacers.length; i++){
+            console.log('hit here2');
+            let replaceClasses = JSON.parse(replacers[i].dataset.replace.replace(/'/g, '"'));
+            Object.keys(replaceClasses).forEach(function(key) {
+                replacers[i].classList.remove(key);
+                replacers[i].classList.add(replaceClasses[key]);
+            });
+        }
+    }, 1);
+});
+          </script>
+
+
+        
+      
+        
+      
+      <div class = "snap-start bg-amber-400 w-screen h-screen flex items-center justify-center text-8xl bg-cover" style="background-image: url('./assets/images/fire2.jpg')">
+        <div class="origin-top-left" >
+          <div class="p-10 bg-black opacity-75 px-10 max-w-2xl mx-auto h-300 p-10 flex flex-col items-start justify-center">
+           <h1 class=" text-white font-bold text-6xl block duration-700 relative transform opacity-0 transition-all translate-y-12 ease-out" data-replace='{ "translate-y-12": "translate-y-0", "opacity-0": "opacity-100" }'>
+             Fire
+           </h1>
+           <p class="top-5 text-white text-lg block duration-700 delay-150 relative transform transition-all opacity-0 translate-y-12 ease-out" data-replace='{ "translate-y-12": "translate-y-0", "opacity-0": "opacity-100" }'>
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate voluptas eius explicabo suscipit, nemo sapiente dignissimos, ipsum illum minus ab itaque accusamus reprehenderit. Quis fuga iusto saepe nobis sunt a. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio ut nulla quos nemo nesciunt enim officiis laudantium, neque labore. Officia illo obcaecati, impedit distinctio dicta laudantium mollitia quam nihil quisquam!
+           </p>
+           
+           <div class="mt-10 sm:flex sm:justify-center lg:justify-start duration-700 delay-300 relative transform transition-all opacity-0 translate-y-12 ease-out" data-replace='{ "translate-y-12": "translate-y-0", "opacity-0": "opacity-100" }'>
+               <div class="rounded-md shadow">
+                   <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
+                       Get started
+                   </a>
+               </div>
+               <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+                   <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-500 focus:outline-none focus:border-indigo-300 focus:shadow-outline-indigo transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
+                       Live demo
+                   </a>
+               </div>
+           </div>
+           </div>
+ 
+ </div>
+      </div>
+      <div class = "snap-start bg-amber-600 w-screen h-screen flex items-center justify-center text-8xl bg-cover" style="background-image: url('./assets/images/fire.jpg')">3</div>
+      <div class = "snap-start bg-amber-800 w-screen h-screen flex items-center justify-center text-8xl bg-cover" style="background-image: url('./assets/images/cp2.jpg')">4</div>
+    </div>
+
   </body>
 </html>
