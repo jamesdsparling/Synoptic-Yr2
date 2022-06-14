@@ -69,6 +69,13 @@ function presentFile(route, destination) {
 // app.get("/", (req, res) => {
 //   res.redirect("/index");
 // });
+app.get("/editmap", (req, res) => {
+  if (req.session.admin == true) {
+    res.sendFile(path.join(__dirname, "/admin/editMap.html"));
+  } else {
+    res.redirect("/");
+  }
+});
 
 app.post("/signin", (req, res) => {
   if (req.body.email && req.body.password) {
