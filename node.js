@@ -69,18 +69,25 @@ function presentFile(route, destination) {
 // app.get("/", (req, res) => {
 //   res.redirect("/index");
 // });
+
+app.get("/", (req, res) => {
+  res.send("index.html not made yet. Go to /map for the map");
+});
+
 app.get("/editmap", (req, res) => {
   if (req.session.admin == true) {
     res.sendFile(path.join(__dirname, "/admin/editMap.html"));
   } else {
-    res.redirect("/");
+    res.send(
+      "Please sign in as an admin user. <br><a href='/signin'>Sign In</a>"
+    );
   }
 });
 
 app.post("/signin", (req, res) => {
   if (req.body.email && req.body.password) {
     client.query(
-      "SELECT profile_ID, pass FROM profiles WHERE email = $1",
+      "SELECT profile_ID, pass, admin FROM profiles WHERE email = $1",
       [req.body.email],
       (err, dbRes) => {
         if (err) {
@@ -94,8 +101,11 @@ app.post("/signin", (req, res) => {
             req.session.email = req.body.email;
             req.session.profile_id = dbRes.rows[0].profile_id;
             req.session.admin = dbRes.rows[0].admin;
+            if (req.session.admin) {
+              console.log("^ Admin user!");
+            }
 
-            res.redirect("/dashboard");
+            res.redirect("/map");
           } else {
             console.log("Incorrect email or password");
             res.send(
@@ -158,7 +168,7 @@ app.post("/signup", (req, res) => {
 
             // Temporary solution. User is still created even if continue is not pressed.
             res.send(
-              'By clicking continue you agree to accept our <a href="/privacy">privacy permissions</a> <br> <a href="/">Continue...</a>'
+              'By clicking continue you agree to accept our <a href="/privacy">privacy permissions</a> <br> <a href="/map">Continue...</a>'
             );
           }
         }
