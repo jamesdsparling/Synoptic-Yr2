@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="stylesheet" href="/public/assets/css/tailwind.css"/> 
+    <link rel="stylesheet" href="/public/dist/output.css"/> 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap" rel="stylesheet">
 
     <style>
       body {
@@ -17,7 +24,9 @@
         width: 100%;
       }
     </style>
-    <link
+
+
+    <!-- <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
       integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
@@ -37,95 +46,213 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
     <link href="https://cdn-webgl.wrld3d.com/wrldjs/addons/polygon_editor/latest/polygon_editor.css" rel="stylesheet" />
-    <script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/polygon_editor/latest/polygon_editor.js"></script>
+    <script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/polygon_editor/latest/polygon_editor.js"></script> -->
+
+    <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
+    <link 
+        rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"
+    />
 
     <title>Cape York</title>
   </head>
-  <body>
-    <a style="color: red" href="/">Map</a>
-    <a href="/report">Report</a>
-    <a href="/fire">Fire</a>
-    <a href="/water">Water</a>
-    <a href="/info">Info</a>
-    <a href="/contact">Contact</a>
-    <a href="/help">Help</a>
-    <a href="/signin">Sign In</a>
-    <a href="/signup">Sign Up</a>
+  <body class="bg-body text-black font-poppins pb-12">
+    <header class = " text-white py-6 sticky">
+      <div class="container flex justify-between items-center mx-auto px-8 md:px-14 lg:px-2 w-full ">
+        <div class= "font-lg font-bold">Cape York Conservation</div>
+        <div class="hidden md:flex space-x-12 items-center">
+          <a href="/">Home</a>
+          <a href="/report">Report</a>
+          <a class = "font-bold" href="/fire">Fire</a>
+          <a href="/water">Water</a>
+          <a href="info.html">Info</a>
+          <a href="/contact">Contact</a>
+          <a href="/account">Contact</a>
+        </div>
+        
+      </div>
+      
+    </header>
+    
+    <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js">
+    </script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js">
+    </script>
 
     <div id="map"></div>
 
+    
     <script>
 
       var center = [-10.689457, 142.531821];
+
+      var map = L.map('map').setView(center, 14);
+        mapLink = 
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 20,
+            }).addTo(map);
+
+		
+
+    var fireIcon = L.icon({
+        iconUrl: "./assets/images/fireIcon.png",
+        iconSize: [48, 65.48], // size of the icon
+      });
+
+  
+
+		var drawnItems = new L.FeatureGroup();
+		map.addLayer(drawnItems);
+
+		var drawControl = new L.Control.Draw({
+			position: 'topleft',
+			draw: {
+				polygon: {
+					shapeOptions: {
+						color: 'red',
+            icon: fireIcon
+					},
+					allowIntersection: false,
+					drawError: {
+						color: 'orange',
+						timeout: 1000
+					},
+					showArea: true,
+					metric: false,
+					repeatMode: true
+				},
+				polyline: {
+					shapeOptions: {
+						color: 'red'
+					},
+				},
+				rect: {
+					shapeOptions: {
+						color: 'green'
+					},
+				},
+				circle: {
+          
+					shapeOptions: {
+						color: 'purple',
+					},
+				},
+				marker: {
+					icon: fireIcon
+				},
+			},
+			edit: {
+				featureGroup: drawnItems
+			}
+		});
+		map.addControl(drawControl);
+
+		map.on('draw:created', function (e) {
+			var type = e.layerType,
+				layer = e.layer;
+
+			if (type === 'marker') {
+				layer.bindPopup('Fire!');
+			}
+
+			drawnItems.addLayer(layer);
+		});
       
-      var map = L.map("map").setView(center, 17);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "© OpenStreetMap",
-      }).addTo(map);
+      // var map = L.map("map").setView(center, 17);
+      // L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      //   maxZoom: 19,
+      //   attribution: "© OpenStreetMap",
+      // }).addTo(map);
 
-      L.marker(center).addTo(map);
+      // L.marker(center).addTo(map).bindPopup("Cape York.<br> The tippy top.")
 
-      var editableLayers = new L.featureGroup();
-      map.addLayer(editableLayers);
 
-      const options = {
-        draw: {
-          polygon: {
-            allowIntersection: false,
-            allowOverlap: false,
-            showArea: true,
-            shapeOptions: {
-              color: '#3375CC',
-              weight: 5
-            }
-          }
-        },
-        edit: {
-          poly: {
-            allowIntersection: false,
-            allowOverlap: false
-          }
-        }
-      };
 
-      var polygonEditor = new WrldIndoorPolygonEditor(map, options);
+      // var editableLayers = new L.featureGroup();
+      // map.addLayer(editableLayers);
 
-      var counter = 0;
+      // const options = {
+      //   draw: {
+      //     polygon: {
+      //       allowIntersection: false,
+      //       allowOverlap: false,
+      //       showArea: true,
+      //       shapeOptions: {
+      //         color: '#3375CC',
+      //         weight: 5
+      //       }
+      //     }
+      //   },
+      //   edit: {
+      //     poly: {
+      //       allowIntersection: false,
+      //       allowOverlap: false
+      //     }
+      //   }
+      // };
 
-      map.on(L.Draw.Event.CREATED, function (e) {
-        var layer = e.layer;
-        if (layer instanceof Wrld.Polygon) {
-          layer.setUserData(counter++);
-          console.log("Created Polygon with userdata: " + layer.getUserData());
+      
 
-          layer.on("click", function(e) {
-            console.log("Polygon data: " + e.target.getUserData() + " Points: " + e.target.getLatLngs());
-          });
-        }
-      });
+      // var polygonEditor = new WrldIndoorPolygonEditor(map, options);
+
+      // var counter = 0;
+
+      // function changeColor(color){
+      //   drawControl.options.draw.polyline.shapeOptions.color = color;
+      //   drawControl.options.draw.polygon.shapeOptions.color = color;
+      //   drawControl.options.draw.rectangle.shapeOptions.color = color;
+      //   if(drawControl._toolbars.draw._activeMode.handler){
+      //     var handler = drawControl._toolbars.draw._activeMode.handler;
+      //     if(handler._poly){
+      //       handler.poly.setStyle({color: color})
+      //     } else if (handler._shape){
+      //       handler._shape.setStyle({color: color})
+      //     }
+      //   }
+      // }
+
+      // map.on(L.Draw.Event.CREATED, function (e) {
+      //   var layer = e.layer;
+        
+      //   if (layer instanceof L.Polygon) {
+      //     layer.setUserData(counter++);
+      //     console.log("Created Polygon with userdata: " + layer.getUserData());
+
+          
+
+      //     layer.on("click", function(e) {
+      //       console.log("Polygon data: " + e.target.getUserData() + " Points: " + e.target.getLatLngs());
+      //     });
+          
+      //   }
+       
+      // });
     
-      map.on(L.Draw.Event.DELETED, function (e) {
-        var layers = e.layers;
-        layers.eachLayer(layer => {
-          if (layer instanceof Wrld.Polygon) {
-            console.log("Deleted Polygon with userdata: " + layer.getUserData());
-          }
-        })
-      });
+      // map.on(L.Draw.Event.DELETED, function (e) {
+      //   var layers = e.layers;
+      //   layers.eachLayer(layer => {
+      //     if (layer instanceof L.Polygon) {
+      //       console.log("Deleted Polygon with userdata: " + layer.getUserData());
+      //     }
+      //   })
+      // });
 
       var fireIcon = L.icon({
-        iconUrl: "fireIcon.png",
+        iconUrl: "assets/images/fireIcon.png",
         iconSize: [48, 65.48], // size of the icon
       });
 
       var waterIcon = L.icon({
-        iconUrl: "waterIcon.png",
+        iconUrl: "assets/images/waterIcon.png",
         iconSize: [48, 48], // size of the icon
       });
 
       var coralIcon = L.icon({
-        iconUrl: "coralIcon.png",
+        iconUrl: "assets/images/coralIcon.png",
         iconSize: [48, 48], // size of the icon
       });
 
@@ -184,7 +311,7 @@
         [-10.690155, 142.531786],
       ];
       let fire1 = new firePoly(fire1Pos);
-      fire1.bindPopup("<b>Fire!</b><br>Stay away.");
+      fire1.bindPopup("<b >Fire!</b><br>Stay away.");
       fire1.addTo(map);
 
       let water1Pos = [

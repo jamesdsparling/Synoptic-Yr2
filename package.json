@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "build": "npx tailwindcss -i ./public/assets/css/input.css -o ./public/dist/ouput.css --watch"
+  },
+  "dependencies": {
+    "node": "^17.7.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.2",
+    "@tailwindcss/typography": "^0.5.2",
+    "tailwindcss": "^3.1.2"
+  }
+}
