@@ -5,6 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <link rel="stylesheet" href="/public/assets/css/tailwind.css" />
+    <link rel="stylesheet" href="/public/dist/output.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
       body {
         padding: 0;
@@ -40,18 +50,23 @@
 
     <title>Cape York</title>
   </head>
-  <body>
-    <div>
-      <a style="color: red" href="/">Map</a>
-      <a href="/report">Report</a>
-      <a href="/fire">Fire</a>
-      <a href="/water">Water</a>
-      <a href="/info">Info</a>
-      <a href="/contact">Contact</a>
-      <a href="/help">Help</a>
-      <a href="/signin">Sign In</a>
-      <a href="/signup">Sign Up</a>
-    </div>
+  <body class="bg-body text-black font-poppins pb-12">
+    <header class="text-white py-6 sticky">
+      <div
+        class="container flex justify-between items-center mx-auto px-8 md:px-14 lg:px-2 w-full"
+      >
+        <div class="font-lg font-bold">Cape York Conservation</div>
+        <div class="hidden md:flex space-x-12 items-center">
+          <a href="/">Home</a>
+          <a href="/report">Report</a>
+          <a class="font-bold" href="/fire">Fire</a>
+          <a href="/water">Water</a>
+          <a href="info.html">Info</a>
+          <a href="/contact">Contact</a>
+          <a href="/account">Contact</a>
+        </div>
+      </div>
+    </header>
 
     <div id="map"></div>
 

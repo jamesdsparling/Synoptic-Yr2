@@ -86,7 +86,7 @@ app.post("/signin", (req, res) => {
             req.session.loggedin = true;
             req.session.email = req.body.email;
             req.session.profile_id = dbRes.rows[0].profile_id;
-            req.session.acmin = dbRes.rows[0].admin;
+            req.session.admin = dbRes.rows[0].admin;
 
             res.redirect("/dashboard");
           } else {
