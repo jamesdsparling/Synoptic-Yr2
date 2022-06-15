@@ -117,20 +117,24 @@
       map.addControl(drawControl);
 
       map.on(L.Draw.Event.CREATED, (e) => {
-        var type = e.layerType,
-          layer = e.layer;
-        switch (type) {
+        switch (e.layerType) {
           case "polyline":
-            break;
-          case "polygon":
-            break;
-          case "rectangle":
-            break;
-          case "circle":
             break;
           case "marker":
             break;
           case "circlemarker":
+            break;
+          case "polygon":
+          case "rectangle":
+          case "circle":
+            let polyType = prompt(
+              "What is in this area?",
+              "fire, water, coral or type another message to show."
+            );
+            console.log(e);
+            $.post("newPoly", (response) => {
+              console.log(response);
+            });
             break;
         }
 

@@ -185,4 +185,13 @@ app.post("/getData", (req, res) => {
   }
 });
 
+app.post("/newPoly", (req, res) => {
+  console.log("Here");
+  if (req.session.admin == true) {
+    console.log(req.body);
+  } else {
+    res.status(404).send({ error: "Not an admin" });
+  }
+});
+
 app.listen(port, () => console.log("listening"));
