@@ -134,10 +134,11 @@
             );
             let layerGeo = e.layer.getLatLngs();
             console.log(layerGeo);
-            let layerJSON = JSON.stringify(layerGeo);
+            latLng = layerGeo[0].map((x) => [x.lat, x.lng]);
+            console.log(latLng);
             $.post(
               "newPoly",
-              { poly: layerJSON, polyType: e.layerType },
+              { poly: latLng, polyType: polyType },
               (response) => {
                 console.log(response);
               }
@@ -145,14 +146,31 @@
             break;
         }
 
-        // drawnItems.addLayer(layer);
+        updateMap();
       });
 
       function updateMap() {
         $.post("/getData", (response) => {
           response.forEach((poly) => {
-            var polyObject = JSON.parse(poly.data);
-            drawnItems.addLayer(polyObject);
+            var newPoly;
+
+            switch (poly.type) {
+              case "fire":
+                var newPoly = new firePoly(poly.data);
+                break;
+              case "water":
+                var newPoly = new waterPoly(poly.data);
+                break;
+              case "coral":
+                var newPoly = new coralPoly(poly.data);
+                break;
+              default:
+                var newPoly = L.polygon(poly.data);
+                newPoly.bindPopup(poly.type);
+            }
+
+            //TODO: seagrass, plants
+            newPoly.addTo(drawnItems);
           });
         });
       }
@@ -161,68 +179,60 @@
         updateMap();
       }, 1000);
 
-      // var fireIcon = L.icon({
-      //   iconUrl: "/assets/images/fireIcon.png",
-      //   iconSize: [48, 65.48], // size of the icon
-      // });
+      var fireIcon = L.icon({
+        iconUrl: "/assets/images/fireIcon.png",
+        iconSize: [48, 65.48], // size of the icon
+      });
 
-      // var waterIcon = L.icon({
-      //   iconUrl: "/assets/images/waterIcon.png",
-      //   iconSize: [48, 48], // size of the icon
-      // });
+      var waterIcon = L.icon({
+        iconUrl: "/assets/images/waterIcon.png",
+        iconSize: [48, 48], // size of the icon
+      });
 
-      // var coralIcon = L.icon({
-      //   iconUrl: "/assets/images/coralIcon.png",
-      //   iconSize: [48, 48], // size of the icon
-      // });
+      var coralIcon = L.icon({
+        iconUrl: "/assets/images/coralIcon.png",
+        iconSize: [48, 48], // size of the icon
+      });
 
-      // var circle = L.circle([-10.688521, 142.53125], {
-      //   color: "yellow",
-      //   fillColor: "yellow",
-      //   fillOpacity: 0.5,
-      //   radius: 50,
-      // });
-      // circle.addTo(map);
+      class polygonWithIcon {
+        constructor(polygon, icon, color) {
+          this.polygon = L.polygon(polygon, {
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.5,
+          });
+          this.marker = L.marker(this.polygon.getBounds().getCenter(), {
+            icon: icon,
+          });
+          this.group = L.featureGroup([this.polygon, this.marker]);
+        }
 
-      // class polygonWithIcon {
-      //   constructor(polygon, icon, color) {
-      //     this.polygon = L.polygon(polygon, {
-      //       color: color,
-      //       fillColor: color,
-      //       fillOpacity: 0.5,
-      //     });
-      //     this.marker = L.marker(this.polygon.getBounds().getCenter(), {
-      //       icon: icon,
-      //     });
-      //     this.group = L.featureGroup([this.polygon, this.marker]);
-      //   }
+        addTo(map) {
+          this.group.addTo(map);
+        }
 
-      //   addTo(map) {
-      //     this.group.addTo(map);
-      //   }
+        bindPopup(content) {
+          this.group.bindPopup(content);
+        }
+      }
 
-      //   bindPopup(content) {
-      //     this.group.bindPopup(content);
-      //   }
-      // }
+      class firePoly extends polygonWithIcon {
+        constructor(polygon) {
+          super(polygon, fireIcon, "red");
+        }
+      }
 
-      // class firePoly extends polygonWithIcon {
-      //   constructor(polygon) {
-      //     super(polygon, fireIcon, "red");
-      //   }
-      // }
+      class waterPoly extends polygonWithIcon {
+        constructor(polygon) {
+          super(polygon, waterIcon, "blue");
+        }
+      }
 
-      // class waterPoly extends polygonWithIcon {
-      //   constructor(polygon) {
-      //     super(polygon, waterIcon, "blue");
-      //   }
-      // }
-
-      // class coralPoly extends polygonWithIcon {
-      //   constructor(polygon) {
-      //     super(polygon, coralIcon, "green");
-      //   }
-      // }
+      class coralPoly extends polygonWithIcon {
+        constructor(polygon) {
+          super(polygon, coralIcon, "green");
+        }
+      }
 
       // let fire1Pos = [
       //   [-10.689277, 142.531764],
