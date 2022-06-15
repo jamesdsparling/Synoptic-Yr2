@@ -91,7 +91,7 @@ function updateMap() {
     markerOverlays.clearLayers();
     response.forEach((poly) => {
       var newPoly, newMarker;
-      switch (poly.type) {
+      switch (poly.type.toLowerCase()) {
         case "fire":
           newPoly = L.polygon(poly.data, {
             color: "red",
@@ -101,7 +101,7 @@ function updateMap() {
           newMarker = L.marker(newPoly.getBounds().getCenter(), {
             icon: fireIcon,
           });
-          console.log("here");
+          newMarker.addTo(markerOverlays);
           break;
         case "water":
           newPoly = L.polygon(poly.data, {
@@ -112,6 +112,7 @@ function updateMap() {
           newMarker = L.marker(newPoly.getBounds().getCenter(), {
             icon: waterIcon,
           });
+          newMarker.addTo(markerOverlays);
           break;
         case "coral":
           newPoly = L.polygon(poly.data, {
@@ -122,6 +123,7 @@ function updateMap() {
           newMarker = L.marker(newPoly.getBounds().getCenter(), {
             icon: coralIcon,
           });
+          newMarker.addTo(markerOverlays);
           break;
         case "seagrass":
           newPoly = L.polygon(poly.data, {
@@ -145,11 +147,10 @@ function updateMap() {
             fillOpacity: 0.5,
           });
       }
-      newPoly.bindPopup(poly.type);
+      newPoly.bindPopup(poly.type.charAt(0).toUpperCase() + poly.type.slice(1));
 
       //TODO: seagrass, plants
       newPoly.addTo(drawnItems);
-      newMarker.addTo(markerOverlays);
     });
   });
 }
