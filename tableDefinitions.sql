@@ -14,7 +14,7 @@ create table profiles (
 create table polygons (
   poly_ID SERIAL primary key,
   type varchar(100) not null,
-  data varchar(1024) not null
+  data double precision[][] not null
 );
 
 create table messages (
