@@ -6,7 +6,7 @@ const path = require("path");
 const { Client } = require("pg");
 
 const app = express();
-const port = 8080;
+const port = 3000;
 
 // const bodyParser = require("body-parser");
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,7 +16,6 @@ const { allowedNodeEnvironmentFlags } = require("process");
 
 const dbPass = fs.readFileSync("pass.txt");
 
-console.log(dbPass.toString());
 const client = new Client({
   user: "defaultuser",
   host: "localhost",
@@ -179,16 +178,32 @@ app.post("/signup", (req, res) => {
 
 app.post("/getData", (req, res) => {
   if (req.session.loggedin == true) {
-    client.query("SELECT * FROM polygons", (err, dbRes) => {
-      res.send(dbRes.rows);
+    client.query("SELECT type, data FROM polygons", (err, dbRes) => {
+      if (err) {
+        console.log(err.stack);
+      } else {
+        res.send(dbRes.rows);
+      }
     });
   }
 });
 
 app.post("/newPoly", (req, res) => {
-  console.log("Here");
   if (req.session.admin == true) {
-    console.log(req.body);
+    if ((req.body.poly, req.body.polyType)) {
+      client.query(
+        "INSERT INTO polygons(type, data) VALUES ($1, $2)",
+        [req.body.polyType, req.body.poly],
+        (err, dbRes) => {
+          if (err) {
+            console.log(err.stack);
+          } else {
+            console.log("New poly received");
+            res.sendStatus(200);
+          }
+        }
+      );
+    }
   } else {
     res.status(404).send({ error: "Not an admin" });
   }

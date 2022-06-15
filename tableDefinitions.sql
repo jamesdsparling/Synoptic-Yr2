@@ -11,13 +11,10 @@ create table profiles (
 );
 
 
-create type poly_type as ENUM ('fire', 'water', 'coral');
-
 create table polygons (
   poly_ID SERIAL primary key,
-  type poly_type not null,
-  data varchar(100) not null,
-  admin_approved bool not null default false
+  type varchar(100) not null,
+  data varchar(1024) not null
 );
 
 create table messages (

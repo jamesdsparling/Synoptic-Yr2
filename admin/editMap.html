@@ -46,6 +46,9 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <script src="lib/json2.js"></script>
+    <script src="lib/cycle.js"></script>
+
     <title>Cape York</title>
   </head>
   <body class="bg-body text-black font-poppins pb-12">
@@ -119,9 +122,7 @@
       map.on(L.Draw.Event.CREATED, (e) => {
         switch (e.layerType) {
           case "polyline":
-            break;
           case "marker":
-            break;
           case "circlemarker":
             break;
           case "polygon":
@@ -131,114 +132,133 @@
               "What is in this area?",
               "fire, water, coral or type another message to show."
             );
-            console.log(e);
-            $.post("newPoly", (response) => {
-              console.log(response);
-            });
+            let layerGeo = e.layer.getLatLngs();
+            console.log(layerGeo);
+            let layerJSON = JSON.stringify(layerGeo);
+            $.post(
+              "newPoly",
+              { poly: layerJSON, polyType: e.layerType },
+              (response) => {
+                console.log(response);
+              }
+            );
             break;
         }
 
-        drawnItems.addLayer(layer);
+        // drawnItems.addLayer(layer);
       });
 
-      var fireIcon = L.icon({
-        iconUrl: "/assets/images/fireIcon.png",
-        iconSize: [48, 65.48], // size of the icon
-      });
-
-      var waterIcon = L.icon({
-        iconUrl: "/assets/images/waterIcon.png",
-        iconSize: [48, 48], // size of the icon
-      });
-
-      var coralIcon = L.icon({
-        iconUrl: "/assets/images/coralIcon.png",
-        iconSize: [48, 48], // size of the icon
-      });
-
-      var circle = L.circle([-10.688521, 142.53125], {
-        color: "yellow",
-        fillColor: "yellow",
-        fillOpacity: 0.5,
-        radius: 50,
-      });
-      circle.addTo(map);
-
-      class polygonWithIcon {
-        constructor(polygon, icon, color) {
-          this.polygon = L.polygon(polygon, {
-            color: color,
-            fillColor: color,
-            fillOpacity: 0.5,
+      function updateMap() {
+        $.post("/getData", (response) => {
+          response.forEach((poly) => {
+            var polyObject = JSON.parse(poly.data);
+            drawnItems.addLayer(polyObject);
           });
-          this.marker = L.marker(this.polygon.getBounds().getCenter(), {
-            icon: icon,
-          });
-          this.group = L.featureGroup([this.polygon, this.marker]);
-        }
-
-        addTo(map) {
-          this.group.addTo(map);
-        }
-
-        bindPopup(content) {
-          this.group.bindPopup(content);
-        }
+        });
       }
 
-      class firePoly extends polygonWithIcon {
-        constructor(polygon) {
-          super(polygon, fireIcon, "red");
-        }
-      }
+      setTimeout(() => {
+        updateMap();
+      }, 1000);
 
-      class waterPoly extends polygonWithIcon {
-        constructor(polygon) {
-          super(polygon, waterIcon, "blue");
-        }
-      }
+      // var fireIcon = L.icon({
+      //   iconUrl: "/assets/images/fireIcon.png",
+      //   iconSize: [48, 65.48], // size of the icon
+      // });
 
-      class coralPoly extends polygonWithIcon {
-        constructor(polygon) {
-          super(polygon, coralIcon, "green");
-        }
-      }
+      // var waterIcon = L.icon({
+      //   iconUrl: "/assets/images/waterIcon.png",
+      //   iconSize: [48, 48], // size of the icon
+      // });
 
-      let fire1Pos = [
-        [-10.689277, 142.531764],
-        [-10.689966, 142.53268],
-        [-10.691178, 142.532419],
-        [-10.690155, 142.531786],
-      ];
-      let fire1 = new firePoly(fire1Pos);
-      fire1.bindPopup("<b>Fire!</b><br>Stay away.");
-      fire1.addTo(map);
+      // var coralIcon = L.icon({
+      //   iconUrl: "/assets/images/coralIcon.png",
+      //   iconSize: [48, 48], // size of the icon
+      // });
 
-      let water1Pos = [
-        [-10.69013, 142.53339],
-        [-10.69056, 142.53384],
-        [-10.69057, 142.53323],
-      ];
-      let water1 = new waterPoly(water1Pos);
-      water1.bindPopup("Water source");
-      water1.addTo(map);
+      // var circle = L.circle([-10.688521, 142.53125], {
+      //   color: "yellow",
+      //   fillColor: "yellow",
+      //   fillOpacity: 0.5,
+      //   radius: 50,
+      // });
+      // circle.addTo(map);
 
-      let coral1Pos = [
-        [-10.68893, 142.53081],
-        [-10.68956, 142.531],
-        [-10.69012, 142.53135],
-        [-10.69083, 142.5316],
-        [-10.69131, 142.53168],
-        [-10.69106, 142.53068],
-        [-10.69033, 142.53052],
-      ];
-      let coral1 = new coralPoly(coral1Pos);
-      coral1.bindPopup("Coral");
-      coral1.addTo(map);
+      // class polygonWithIcon {
+      //   constructor(polygon, icon, color) {
+      //     this.polygon = L.polygon(polygon, {
+      //       color: color,
+      //       fillColor: color,
+      //       fillOpacity: 0.5,
+      //     });
+      //     this.marker = L.marker(this.polygon.getBounds().getCenter(), {
+      //       icon: icon,
+      //     });
+      //     this.group = L.featureGroup([this.polygon, this.marker]);
+      //   }
 
-      let marker1 = L.marker([-10.68778, 142.53159]);
-      marker1.bindPopup("Custom marker");
-      marker1.addTo(map);
+      //   addTo(map) {
+      //     this.group.addTo(map);
+      //   }
+
+      //   bindPopup(content) {
+      //     this.group.bindPopup(content);
+      //   }
+      // }
+
+      // class firePoly extends polygonWithIcon {
+      //   constructor(polygon) {
+      //     super(polygon, fireIcon, "red");
+      //   }
+      // }
+
+      // class waterPoly extends polygonWithIcon {
+      //   constructor(polygon) {
+      //     super(polygon, waterIcon, "blue");
+      //   }
+      // }
+
+      // class coralPoly extends polygonWithIcon {
+      //   constructor(polygon) {
+      //     super(polygon, coralIcon, "green");
+      //   }
+      // }
+
+      // let fire1Pos = [
+      //   [-10.689277, 142.531764],
+      //   [-10.689966, 142.53268],
+      //   [-10.691178, 142.532419],
+      //   [-10.690155, 142.531786],
+      // ];
+      // let fire1 = new firePoly(fire1Pos);
+      // fire1.bindPopup("<b>Fire!</b><br>Stay away.");
+      // fire1.addTo(map);
+
+      // let water1Pos = [
+      //   [-10.69013, 142.53339],
+      //   [-10.69056, 142.53384],
+      //   [-10.69057, 142.53323],
+      // ];
+      // let water1 = new waterPoly(water1Pos);
+      // water1.bindPopup("Water source");
+      // water1.addTo(map);
+
+      // let coral1Pos = [
+      //   [-10.68893, 142.53081],
+      //   [-10.68956, 142.531],
+      //   [-10.69012, 142.53135],
+      //   [-10.69083, 142.5316],
+      //   [-10.69131, 142.53168],
+      //   [-10.69106, 142.53068],
+      //   [-10.69033, 142.53052],
+      // ];
+      // let coral1 = new coralPoly(coral1Pos);
+      // coral1.bindPopup("Coral");
+      // coral1.addTo(map);
+
+      // let marker1 = L.marker([-10.68778, 142.53159]);
+      // marker1.bindPopup("Custom marker");
+      // marker1.addTo(map);
     </script>
   </body>
 </html>
