@@ -73,14 +73,18 @@ app.get("/", (req, res) => {
   res.send("index.html not made yet. Go to /map for the map");
 });
 
-app.get("/editmap", (req, res) => {
-  if (req.session.admin == true) {
-    res.sendFile(path.join(__dirname, "/admin/editMap.html"));
-  } else {
-    res.send(
-      "Please sign in as an admin user. <br><a href='/signin'>Sign In</a>"
-    );
-  }
+// app.get("/editmap", (req, res) => {
+//   if (req.session.admin == true) {
+//     res.sendFile(path.join(__dirname, "/admin/editMap.html"));
+//   } else {
+//     res.send(
+//       "Please sign in as an admin user. <br><a href='/signin'>Sign In</a>"
+//     );
+//   }
+// });
+
+app.post("/isAdmin", (req, res) => {
+  res.send(req.session.admin);
 });
 
 app.post("/signin", (req, res) => {
