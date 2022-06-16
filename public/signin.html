@@ -23,42 +23,45 @@
       <input type="submit" id="signin" value="Sign in" />
     </form> -->
 
+    <!-- Header with no navigation -->
     <header class = " p-5 py-6 text-white bg-black opacity-100">
       <div class="container flex justify-between items-center mx-auto px-8 md:px-14 lg:px-2 w-full ">
         <div class= "font-lg font-bold text-white">Cape York <br>Conservation</div>
       </div>
       
     </header>
-  
-<div class="flex items-center justify-center min-h-screen" style="background-image: url('./assets/images/fire.jpg')">
-  <div class="px-8 py-6 mx-4 mt-4 rounded-lg text-white text-left bg-black opacity-80 shadow-lg md:w-1/2 lg:w-1/2 sm:w-1/3">
-      <h3 class="text-2xl font-bold text-center">Sign In</h3>
-      <form method="POST" action="/signin">
-          <div class="mt-4">
-              <div class="mt-4">
-                  <label class="block" for="email">Email<label>
-                          <input type="email" name = "email" placeholder="Email" required
-                              class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
-              </div>
-              <div class="mt-4">
-                  <label class="block" for = "password">Password<label>
-                          <input type="password" name = "password"placeholder="Password" required
-                              class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
-              </div>
-              
-              <div class="flex">
-                <input type="submit" id="signin" value="Sign in" class="w-full px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900"/>
-                  
-              </div>
-              <div class="mt-6 text-grey-dark">
-                  Need to create an account?
-                  <a class="text-blue-600 hover:underline" href="signup.html">
-                    Sign Up
-                  </a>
-              </div>
-          </div>
-      </form>
+  <!-- Sign in formatting -->
+  <div class="flex items-center justify-center min-h-screen" style="background-image: url('./assets/images/cp2.jpg')">
+    <div class="px-8 py-6 mx-4 mt-4 rounded-lg text-white text-left bg-black opacity-80 shadow-lg md:w-1/2 lg:w-1/2 sm:w-1/3">
+        <h3 class="text-2xl font-bold text-center">Sign In</h3>
+        <!-- Sign in form - post to node.js -->
+        <form method="POST" action="/signin">
+            <div class="mt-4">
+                <div class="mt-4">
+                    <label class="block" for="email">Email<label>
+                            <input type="email" name = "email" placeholder="Email" required
+                                class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
+                </div>
+                <div class="mt-4">
+                    <label class="block" for = "password">Password<label>
+                            <input type="password" name = "password"placeholder="Password" required
+                                class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600">
+                </div>
+                
+                <div class="flex">
+                  <input type="submit" id="signin" value="Sign in" class="w-full px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900"/>
+                    
+                </div>
+                <!-- Link to sign up page -->
+                <div class="mt-6 text-grey-dark">
+                    Need to create an account?
+                    <a class="text-blue-600 hover:underline" href="signup.html">
+                      Sign Up
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
   </div>
-</div>
-</body>
+  </body>
 </html>

@@ -12,6 +12,7 @@
 
   </head>
 
+  <!-- Header with no navigation -->
   <header class = " p-5 py-6 text-white bg-black opacity-100">
     <div class="container flex justify-between items-center mx-auto px-8 md:px-14 lg:px-2 w-full ">
       <div class= "font-lg font-bold text-white">Cape York <br>Conservation</div>
@@ -19,11 +20,13 @@
     
   </header>
 
+  <!-- Sign Up formatting -->
   <body>
     <div class="flex items-center justify-center min-h-screen" style="background-image: url('./assets/images/fire.jpg')">
       <div class="px-8 py-6 mx-4 mt-4 rounded-lg text-white text-left bg-black opacity-80 shadow-lg md:w-1/2 lg:w-1/2 sm:w-1/3">
           <h3 class="text-2xl font-bold text-center">Sign Up</h3>
-          <form method="POST" action="/signun">
+          <!-- Sign Up form - Post to node.js -->
+          <form method="POST" action="/signup">
               <div class="mt-4">
                   <div class="mt-4">
                       <label class="block" for="email">Email<label>
@@ -47,6 +50,7 @@
                       
                   </div>
                 
+                  <!-- Link to sign in page  -->
                   <div class="mt-6 text-grey-dark">
                       Already have an account?
                       <a class="text-blue-600 hover:underline" href="signin.html">
