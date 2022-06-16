@@ -30,44 +30,52 @@ L.control
   )
   .addTo(map);
 
-var drawControl = new L.Control.Draw({
-  edit: {
-    featureGroup: drawnItems,
-  },
-  draw: {
-    polygon: {
-      allowIntersection: false,
-      allowOverlap: false,
-      showArea: true,
-    },
-  },
-});
-map.addControl(drawControl);
+$.get("/isAdmin", (response) => {
+  console.log(response);
+  if (response == true) {
+    var drawControl = new L.Control.Draw({
+      edit: {
+        featureGroup: drawnItems,
+      },
+      draw: {
+        polygon: {
+          allowIntersection: false,
+          allowOverlap: false,
+          showArea: true,
+        },
+      },
+    });
+    map.addControl(drawControl);
 
-map.on(L.Draw.Event.CREATED, (e) => {
-  switch (e.layerType) {
-    case "polyline":
-    case "marker":
-    case "circlemarker":
-      break;
-    case "polygon":
-    case "rectangle":
-    case "circle":
-      let polyType = prompt(
-        "What is in this area?",
-        "fire, water, coral or type another message to show."
-      );
-      let layerGeo = e.layer.getLatLngs();
-      console.log(layerGeo);
-      latLng = layerGeo[0].map((x) => [x.lat, x.lng]);
-      console.log(latLng);
-      $.post("newPoly", { poly: latLng, polyType: polyType }, (response) => {
-        console.log(response);
-      });
-      break;
+    map.on(L.Draw.Event.CREATED, (e) => {
+      switch (e.layerType) {
+        case "polyline":
+        case "marker":
+        case "circlemarker":
+          break;
+        case "polygon":
+        case "rectangle":
+        case "circle":
+          let polyType = prompt(
+            "What is in this area?",
+            "fire, water, coral or type another message to show."
+          );
+          let layerGeo = e.layer.getLatLngs();
+          console.log(layerGeo);
+          latLng = layerGeo[0].map((x) => [x.lat, x.lng]);
+          console.log(latLng);
+          $.post(
+            "newPoly",
+            { poly: latLng, polyType: polyType },
+            (response) => {
+              console.log(response);
+            }
+          );
+          break;
+      }
+      updateMap();
+    });
   }
-
-  updateMap();
 });
 
 var fireIcon = L.icon({
@@ -86,7 +94,7 @@ var coralIcon = L.icon({
 });
 
 function updateMap() {
-  $.post("/getData", (response) => {
+  $.get("/getData", (response) => {
     drawnItems.clearLayers();
     markerOverlays.clearLayers();
     response.forEach((poly) => {
