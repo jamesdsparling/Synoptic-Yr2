@@ -69,10 +69,6 @@ function presentFile(route, destination) {
 //   res.redirect("/index");
 // });
 
-app.get("/", (req, res) => {
-  res.send("index.html not made yet. Go to /map for the map");
-});
-
 // app.get("/editmap", (req, res) => {
 //   if (req.session.admin == true) {
 //     res.sendFile(path.join(__dirname, "/admin/editMap.html"));
@@ -83,8 +79,14 @@ app.get("/", (req, res) => {
 //   }
 // });
 
-app.post("/isAdmin", (req, res) => {
+app.get("/isAdmin", (req, res) => {
   res.send(req.session.admin);
+});
+
+app.get("/signout", (req, res) => {
+  if (req.session.loggedin == true) {
+    req.session.destroy();
+  }
 });
 
 app.post("/signin", (req, res) => {
@@ -108,7 +110,7 @@ app.post("/signin", (req, res) => {
               console.log("^ Admin user!");
             }
 
-            res.redirect("/map");
+            res.redirect("/");
           } else {
             console.log("Incorrect email or password");
             res.send(
@@ -171,7 +173,7 @@ app.post("/signup", (req, res) => {
 
             // Temporary solution. User is still created even if continue is not pressed.
             res.send(
-              'By clicking continue you agree to accept our <a href="/privacy">privacy permissions</a> <br> <a href="/map">Continue...</a>'
+              'By clicking continue you agree to accept our <a href="/privacy">privacy permissions</a> <br> <a href="/">Continue...</a>'
             );
           }
         }
@@ -180,7 +182,7 @@ app.post("/signup", (req, res) => {
   }
 });
 
-app.post("/getData", (req, res) => {
+app.get("/getData", (req, res) => {
   if (req.session.loggedin == true) {
     client.query("SELECT type, data FROM polygons", (err, dbRes) => {
       if (err) {
